@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>annotations</Nullable>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ImGui.NET" Version="1.91.6.1" />
+    <PackageReference Include="OpenTK.Windowing.Desktop" Version="4.9.4" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<None Include="Resources\**\*">
+			<Link>Resources\%(RecursiveDir)%(Filename)%(Extension)</Link>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="Resources\Shaders\Shader.glsl" />
+	  <None Remove="Resources\Shaders\Shader.glsl" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\EngineCore\EngineCore.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Reference Include="OpenTK.Windowing.Desktop">
+	    <HintPath>bin\Debug\net8.0\OpenTK.Windowing.Desktop.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
+
+	
+
+</Project>

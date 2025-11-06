@@ -31,7 +31,10 @@ namespace EngineCore.Platform.OpenGL
         {
             GL.BufferSubData(BufferTarget.ArrayBuffer, IntPtr.Zero, size, data);
         }
-
+        public void Bind()
+        {
+            GL.BindBuffer(BufferTarget.ArrayBuffer, Handle);
+        }
        
         public void AttachToVertexArray(VertexArray vertexArray)
         {

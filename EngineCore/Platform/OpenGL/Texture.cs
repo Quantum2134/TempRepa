@@ -44,7 +44,7 @@ namespace EngineCore.Platform.OpenGL
         {
             Handle = GL.GenTexture();
             Bind();
-
+            StbImage.stbi_set_flip_vertically_on_load(1);
             using (var stream = File.OpenRead(path))
             {
                 ImageResult image = ImageResult.FromStream(stream, ColorComponents.RedGreenBlueAlpha);
