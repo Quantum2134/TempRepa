@@ -8,5 +8,9 @@ namespace EngineCore.Scripts
 {
     internal class ScriptEngine
     {
+        public ScriptEngine()
+        {
+            
+        }
     }
 }

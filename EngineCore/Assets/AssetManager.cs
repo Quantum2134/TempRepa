@@ -10,7 +10,7 @@ using System.Reflection;
 
 namespace EngineCore.Assets
 {
-    internal class AssetManager
+    public class AssetManager
     {
         private Dictionary<string, Asset> assets;
         private List<IAssetImporter> importers;

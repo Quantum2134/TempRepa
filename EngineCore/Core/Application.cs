@@ -36,7 +36,7 @@ namespace EngineCore.Core
         public Renderer renderer;
         public Scene Scene { get; private set; }
         public FrameBuffer fbo;
-      
+
         protected override void OnLoad()
         {
             base.OnLoad();
@@ -50,6 +50,7 @@ namespace EngineCore.Core
                                                                                      "D:\\Projects\\GameEngine\\EngineEditor\\Resources\\DefaultFragment.frag");
             graphicsSystem.GraphicsContext.ShaderManager.LoadShader("TextureShader", "D:\\Projects\\GameEngine\\EngineEditor\\Resources\\TextureVertex.vert",
                                                                                      "D:\\Projects\\GameEngine\\EngineEditor\\Resources\\TextureFragment.frag");
+
 
             renderer = new Renderer(graphicsSystem.GraphicsContext);
             Scene = new Scene(this);
@@ -65,6 +66,8 @@ namespace EngineCore.Core
 
             fbo = new FrameBuffer(ClientSize.X, ClientSize.Y);
 
+            
+
         }
 
         protected override void OnUnload()
@@ -74,6 +77,7 @@ namespace EngineCore.Core
 
         protected virtual void DrawEditor()
         { }
+        
        
         protected override void OnUpdateFrame(FrameEventArgs args)
         {
@@ -86,19 +90,26 @@ namespace EngineCore.Core
         
         protected override void OnRenderFrame(FrameEventArgs args)
         {
-                base.OnRenderFrame(args);
+            base.OnRenderFrame(args);
 
 
 
-                fbo.Bind();
 
-                GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-                renderer.Begin(graphicsSystem.Camera);
-                DrawEditor();
-                Scene.Render();
+            fbo.Bind();
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
             
-            
-            
+
+            renderer.Begin(graphicsSystem.Camera);
+            DrawEditor();
+            Scene.Render();
+            FrameBuffer.Unbind();
+
+            GL.Viewport(0, 0, ClientSize.X, ClientSize.Y);
+
+
+
+
 
 
 
@@ -109,7 +120,7 @@ namespace EngineCore.Core
         {
             base.OnResize(e);
 
-            graphicsSystem.SetViewport(new Vector2i(0, 0), new Vector2i(e.Width, e.Height));
+            graphicsSystem.SetViewport(new Vector2i(0, 0), new Vector2i(ClientSize.X, ClientSize.Y));
         }
     }
 }

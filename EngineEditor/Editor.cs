@@ -25,6 +25,7 @@ using EngineEditor.EditorPanels;
 using EngineCore.Logging;
 using EngineCore.Logging.LogOutputs;
 using EngineCore.Logging.Profiling;
+using EngineCore.Assets.Assets;
 
 
 
@@ -72,9 +73,9 @@ namespace EngineEditor
         }
         private void Init()
         {
-            Texture texture = new Texture(@"C:\Users\Fedor\Desktop\Earth_PNG_Clip_Art-2162.png");
+            Texture texture = new Texture(@"D:\Projects\GameEngine\EngineEditor\Resources\Textures\Red-Circle-Transparent.png");           
             Sprite sprite = new Sprite(texture);
-            sprite.Color = Color4.White;
+            sprite.Color = Color4.Red;
             SpriteRenderer sr = new SpriteRenderer(sprite);
 
             C = new Entity("C");
@@ -100,16 +101,6 @@ namespace EngineEditor
             graphicsSystem.Camera.Size = 360f;
 
             graphicsSystem.GraphicsContext.StateManager.SetClearColor(new Color4(150, 150, 150, 255));
-
-
-            Logger.AddLogOutput(new ConsoleLogOutput());
-            Logger.Log("Hello trace", LogLevel.Trace);
-            Logger.Log("Hello info", LogLevel.Info);
-            Logger.Log("Hello warning", LogLevel.Warning);
-            Logger.Log("Hello error", LogLevel.Error);
-
-
-
         }
 
         protected override void DrawEditor()
@@ -131,10 +122,15 @@ namespace EngineEditor
             base.OnUpdateFrame(args);            
         }
         protected override void OnRenderFrame(FrameEventArgs args)
-        {           
-            base.OnRenderFrame(args);
+        {
+            
 
-            if (t <= 1.7f && onSim)
+            base.OnRenderFrame(args);
+            
+
+            
+
+            if (t <= 1f && onSim)
             {
                 C.transform.Position = Cpoint(t) * 100;
                 A.transform.Position = Apoint(t) * 100;
@@ -155,9 +151,8 @@ namespace EngineEditor
                 Logger.Log("Error", LogLevel.Error);
             }
 
-            
 
-            FrameBuffer.Unbind();
+
 
 
 
@@ -172,6 +167,8 @@ namespace EngineEditor
             consolePanel.Render();
             ViewportPanel();
 
+            
+
             controller.Render();
 
             SwapBuffers();
@@ -181,15 +178,22 @@ namespace EngineEditor
 
         private void ViewportPanel()
         {
-            ImGui.Begin("Viewport", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse);
-            ImGui.Image(fbo.ColorTexture.Handle, new System.Numerics.Vector2(1920, 1080), new System.Numerics.Vector2(0, 1), new System.Numerics.Vector2(1, 0));
+            ImGui.Begin("Viewport", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.MenuBar);
+            ImGui.Image(fbo.ColorTexture.Handle, new System.Numerics.Vector2(ClientSize.X, ClientSize.Y), new System.Numerics.Vector2(0, 1), new System.Numerics.Vector2(1, 0));
             if (ImGui.IsWindowHovered())
             {
                 if (MouseState.IsButtonDown(MouseButton.Left))
                 {
-                    //graphicsSystem.Camera.Position -= new Vector2(MouseState.Delta.X, -MouseState.Delta.Y);
+                    graphicsSystem.Camera.Position -= new Vector2(MouseState.Delta.X, -MouseState.Delta.Y) * graphicsSystem.Camera.Size / 1061;
+
                 }
-                //graphicsSystem.Camera.Size -= MouseState.ScrollDelta.Y * 20;
+                graphicsSystem.Camera.Size -= MouseState.ScrollDelta.Y * 20;
+
+                if (MouseState.IsButtonPressed(MouseButton.Right))
+                {
+                    Logger.Log($"{ClientSize.ToString()}, {graphicsSystem.Camera.Size}", LogLevel.Trace);
+
+                }
 
             }
             ImGui.End();
@@ -199,7 +203,9 @@ namespace EngineEditor
         {
             base.OnResize(e);
             controller.WindowResized(e.Width, e.Height);
-        }
+            
+            Logger.Log($"Resized {ClientSize.X}, {ClientSize.Y}", LogLevel.Trace);
+        }        
 
 
 
@@ -208,7 +214,12 @@ namespace EngineEditor
             base.OnTextInput(e);
 
             controller.PressChar((char)e.Unicode);
-            controller.MouseScroll(MouseState.Scroll);
+            
+        }
+        protected override void OnMouseWheel(MouseWheelEventArgs e)
+        {
+            base.OnMouseWheel(e);
+            controller.MouseScroll(e.Offset);
         }
 
 

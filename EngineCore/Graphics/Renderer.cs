@@ -213,7 +213,7 @@ namespace EngineCore.Graphics
             const float headRatio = 0.2f;  // 20% от длины стрелки
             const float headAngle = 25f;   // Угол стрелки в градусах
 
-            var headLength = length * headRatio;
+            var headLength = 20;
             var headStart = end - direction * headLength; // Точка, где начинается стрелка
 
             // Угол поворота для стрелки
@@ -233,8 +233,8 @@ namespace EngineCore.Graphics
                 direction.X * (-sin) + direction.Y * cos
             );
 
-            var leftEnd = headStart + leftDir * headLength;
-            var rightEnd = headStart + rightDir * headLength;
+            var leftEnd = leftDir * headLength;
+            var rightEnd = rightDir * headLength;
 
             // Рисуем стрелку
             DrawWidthLine(end, leftEnd, width, color, z);
@@ -256,7 +256,7 @@ namespace EngineCore.Graphics
             const float headRatio = 0.2f;  // 20% от длины стрелки
             const float headAngle = 160f;   // Угол стрелки в градусах
 
-            var headLength = length * headRatio;
+            var headLength = length;
             var headStart = end - dir * headLength; // Точка, где начинается стрелка
 
             // Угол поворота для стрелки
@@ -340,8 +340,8 @@ namespace EngineCore.Graphics
                 dir.X * (-sin) + dir.Y * cos
             );
 
-            var leftEnd = headStart + leftDir * headLength;
-            var rightEnd = headStart + rightDir * headLength;
+            var leftEnd = end + leftDir * MathHelper.Clamp(headLength, 0, 8);
+            var rightEnd = end + rightDir * MathHelper.Clamp(headLength, 0, 8);
 
             // Рисуем стрелку
             DrawLine(end, leftEnd, color, z);
