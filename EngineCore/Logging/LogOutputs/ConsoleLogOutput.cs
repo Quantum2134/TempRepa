@@ -9,9 +9,15 @@ namespace EngineCore.Logging.LogOutputs
     public class ConsoleLogOutput : ILogOutput
     {
         public void Write(string message, LogLevel level)
-        {
+        {           
             switch (level)
-            {              
+            {
+                case LogLevel.Trace:
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    break;
+                case LogLevel.Info:
+                    Console.ForegroundColor = ConsoleColor.White;
+                    break;
                 case LogLevel.Warning:
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     break;
@@ -24,7 +30,7 @@ namespace EngineCore.Logging.LogOutputs
 
             Console.WriteLine(message);
 
-            Console.ForegroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Gray;
         }
     }
 }

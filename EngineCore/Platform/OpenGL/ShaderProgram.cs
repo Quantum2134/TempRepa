@@ -14,13 +14,13 @@ namespace EngineCore.Platform.OpenGL
 
         public int Handle => _handle;
 
-        public ShaderProgram(string vertexShaderPath, string fragmentShaderPath)
+        public ShaderProgram(string vertexShaderSource, string fragmentShaderSource)
         {
             _handle = GL.CreateProgram();
 
             //vertex
             int vertexShader = GL.CreateShader(ShaderType.VertexShader);
-            GL.ShaderSource(vertexShader, File.ReadAllText(vertexShaderPath));
+            GL.ShaderSource(vertexShader, vertexShaderSource);
             GL.CompileShader(vertexShader);
 
             GL.GetShader(vertexShader, ShaderParameter.CompileStatus, out int success);
@@ -34,7 +34,7 @@ namespace EngineCore.Platform.OpenGL
 
             //fragment
             int fragmentShader = GL.CreateShader(ShaderType.FragmentShader);
-            GL.ShaderSource(fragmentShader, File.ReadAllText(fragmentShaderPath));
+            GL.ShaderSource(fragmentShader, fragmentShaderSource);
             GL.CompileShader(fragmentShader);
 
             GL.GetShader(fragmentShader, ShaderParameter.CompileStatus, out success);

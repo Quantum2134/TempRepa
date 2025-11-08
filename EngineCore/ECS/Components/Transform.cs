@@ -20,11 +20,6 @@ namespace EngineCore.ECS.Components
 {
     public class Transform
     {
-        private Vector2 position;
-        private float rotation; 
-        private Vector2 scale;
-
-
         public Vector2 Position { get; set; }
         public float Rotation { get; set; }
         public Vector2 Scale { get; set; }

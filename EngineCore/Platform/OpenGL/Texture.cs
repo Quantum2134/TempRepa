@@ -38,24 +38,17 @@ namespace EngineCore.Platform.OpenGL
         {
             set => GL.TexParameter(Target, TextureParameterName.TextureMagFilter, (int)value);
         }
-
+      
         //Sprite
-        public Texture(string path, bool generateMipmaps = true)
+        public Texture(int width, int height, byte[] data, bool generateMipmaps = true)
         {
             Handle = GL.GenTexture();
             Bind();
-            StbImage.stbi_set_flip_vertically_on_load(1);
-            using (var stream = File.OpenRead(path))
-            {
-                ImageResult image = ImageResult.FromStream(stream, ColorComponents.RedGreenBlueAlpha);
-                Width = image.Width;
-                Height = image.Height;
 
-                GL.TexImage2D(Target, 0, PixelInternalFormat.Rgba,
-                              Width, Height, 0,
+            GL.TexImage2D(Target, 0, PixelInternalFormat.Rgba,
+                              width, height, 0,
                               PixelFormat.Rgba, PixelType.UnsignedByte,
-                              image.Data);
-            }
+                              data);
 
             SetupTextureParameters(generateMipmaps);
         }
@@ -100,6 +93,11 @@ namespace EngineCore.Platform.OpenGL
         {
             GL.DeleteTexture(Handle);
             GC.SuppressFinalize(this);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Handle == ((Texture)obj).Handle;
         }
     }
 }

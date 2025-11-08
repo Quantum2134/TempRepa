@@ -305,6 +305,29 @@ namespace EngineCore.Graphics
 
             GL.DrawArrays(PrimitiveType.Lines, 0, 2);
         }
+
+        public void DrawCircle(Vector2 center, float radius, Color4 color, float z, int num = 30)
+        {
+            float t = 0;
+            float dt = MathHelper.TwoPi / num;
+
+            Vector2[] points = new Vector2[num];
+
+            for(int i = 0; i < num; i++)
+            {
+                float x = center.X + radius * MathF.Cos(t);
+                float y = center.Y + radius * MathF.Sin(t);
+
+                points[i] = new Vector2(x, y);
+
+                t += dt;
+            }
+
+            for(int i = 0; i < num;  i++)
+            {
+                DrawLine(points[i], points[(i + 1) % num], color, z);
+            }
+        }
         public void DrawArrow(Vector2 start, Vector2 direction, Color4 color, float z)
         {
             var length = direction.Length;

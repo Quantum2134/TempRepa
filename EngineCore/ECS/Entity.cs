@@ -32,10 +32,17 @@ namespace EngineCore.ECS
 
         public T GetComponent<T>() where T : Component
         {
-            foreach (var comp in components)
-                if (comp is T result)
-                    return result;
-            return null;
+            T result = null;
+
+            foreach (var component in components)
+            {
+                if(component.GetType() == typeof(T) || component.GetType().IsAssignableFrom(typeof(T)))
+                {
+                    result = (T)component;
+                }
+            }
+
+            return result;       
         }
 
         public T[] GetComponents<T>() where T : Component

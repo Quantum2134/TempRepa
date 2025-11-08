@@ -21,13 +21,13 @@ namespace EngineCore.ECS.Components
     public class SpriteRenderer : Component
     {
         public Sprite Sprite { get; set; }
-
+        public int Layer { get; set; }
         public Color4 Color { get; set; }
 
         public SpriteRenderer(Sprite sprite)
         {
             Sprite = sprite;
-            Color = sprite.Color;
+            Color = Color4.White;
         }
     }
 }

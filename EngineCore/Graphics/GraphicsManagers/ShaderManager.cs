@@ -5,39 +5,42 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using EngineCore.Assets.AssetTypes;
+using EngineCore.Logging;
 
 namespace EngineCore.Graphics.GraphicsManagers
 {
     public class ShaderManager
     {
+        private GraphicsContext graphicsContext;
+
         private Dictionary<string, ShaderProgram> _shaders;
 
-        public ShaderManager()
+        public ShaderManager(GraphicsContext graphicsContext)
         {
+            this.graphicsContext = graphicsContext;
+
             _shaders = new Dictionary<string, ShaderProgram>();
         }
 
         public ShaderProgram GetShader(string name)
         {
-            //return _shaders.TryGetValue(name, out var shaderProgram) ? shaderProgram : null;
+            if(_shaders.TryGetValue(name, out var shaderProgram)) return shaderProgram;
 
-            if(_shaders.TryGetValue(name, out var shaderProgram))
-            {
-                Console.WriteLine("Good");
-                return shaderProgram;
-            }
-            else
-            {
-                return null;
-            }
+            return null;
         }
 
-        public ShaderProgram LoadShader(string name, string vertexPath, string fragmentPath)
+        public ShaderProgram LoadShader(string shaderProgramName, string vertexShaderName, string fragmentShaderName)
         {
-            if(_shaders.ContainsKey(name)) return _shaders[name];
-           
-            ShaderProgram shader = new ShaderProgram(vertexPath, fragmentPath);
-            _shaders.Add(name, shader);
+            if(_shaders.ContainsKey(shaderProgramName)) return _shaders[shaderProgramName];
+
+            ShaderAsset vertexShaderAsset = graphicsContext.GraphicsSystem.Application.AssetSystem.GetAsset<ShaderAsset>(vertexShaderName);
+            ShaderAsset fragmentShaderAsset = graphicsContext.GraphicsSystem.Application.AssetSystem.GetAsset<ShaderAsset>(fragmentShaderName);
+
+            ShaderProgram shader = new ShaderProgram(vertexShaderAsset.ShaderSource, fragmentShaderAsset.ShaderSource);
+            _shaders.Add(shaderProgramName, shader);
+
+            Logger.Log($"Shader program {shaderProgramName} created successfully", LogLevel.Info);
 
             return shader;
         }

@@ -24,15 +24,15 @@ namespace EngineCore.ECS
 {
     public class Scene
     {
-        public Application Application { get; private set; }
+        public string Name { get; set; }
+        public Application Application { get; set; }
 
         public List<Entity> entities;
 
 
-        public Scene(Application application)
+        public Scene()
         {
             entities = new List<Entity>();
-            Application = application;
         }
 
         public void AddEntity(Entity entity)
@@ -47,7 +47,7 @@ namespace EngineCore.ECS
                 SpriteRenderer sr = entity.GetComponent<SpriteRenderer>();
                 if (sr != null)
                 {
-                    Application.renderer.DrawTexture(sr.Sprite.Texture, sr.Color, entity.transform.Position, entity.transform.Scale, sr.Sprite.Layer);
+                    Application.renderer.DrawTexture(sr.Sprite.Texture, sr.Color, entity.transform.Position, entity.transform.Scale, sr.Layer);
                 }
             }
         }

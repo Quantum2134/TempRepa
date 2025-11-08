@@ -7,16 +7,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
+using EngineCore.Logging;
 
 namespace EngineCore.Assets
 {
-    public class AssetManager
+    public class AssetSystem
     {
         private Dictionary<string, Asset> assets;
         private List<IAssetImporter> importers;
         private string resourcesPath;
 
-        public AssetManager()
+        public string ResourcesPath => resourcesPath;
+
+        public List<Asset> Assets => assets.Values.ToList();
+
+        public AssetSystem()
         {
             assets = new Dictionary<string, Asset>();
             importers = new List<IAssetImporter>();
@@ -41,7 +46,7 @@ namespace EngineCore.Assets
         public void LoadAssetsFromDirectory(string subDir, string extension)
         {
             string dirPath = Path.Combine(resourcesPath, subDir);
-            if (!Directory.Exists(dirPath)) throw new Exception();
+            if (!Directory.Exists(dirPath)) Logger.Log($"Path {dirPath} does not exist", LogLevel.Error);
 
             foreach(string fileName in  Directory.GetFiles(dirPath, $"*{extension}", SearchOption.AllDirectories))
             {             
@@ -52,13 +57,13 @@ namespace EngineCore.Assets
                     {
                         var asset = importer.Import(fileName);
                         assets[asset.Name] = asset;
+                        Logger.Log($"Asset {asset.Path} loaded successfully", LogLevel.Info);
                     }
                     catch(Exception ex)
                     {
-                        Console.WriteLine(ex.Message);
+                        Logger.Log($"Failed to load {fileName} - {ex.Message}", LogLevel.Error);
                     }
                 }
-                Console.WriteLine($"FileName: {Path.GetFileNameWithoutExtension(fileName)}; Loaded successfully");
             }
         }
         
@@ -68,6 +73,7 @@ namespace EngineCore.Assets
             {
                 return (T)asset;
             }
+            Logger.Log($"No {name} was found", LogLevel.Error);
             return null;
         }
     }

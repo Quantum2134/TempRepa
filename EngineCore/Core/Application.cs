@@ -22,6 +22,8 @@ using EngineCore.Assets;
 using EngineCore.Assets.Assets;
 using EngineCore.Assets.AssetTypes;
 using EngineCore.Logging.Profiling;
+using EngineCore.Logging;
+using EngineCore.Logging.LogOutputs;
 
 
 namespace EngineCore.Core
@@ -32,9 +34,17 @@ namespace EngineCore.Core
         {
         }
 
-        public GraphicsSystem graphicsSystem;
+        public AssetSystem AssetSystem { get; private set; }
+
+        public GraphicsSystem GraphicsSystem { get; private set; }
+
+
+        public SceneSystem SceneSystem { get; private set; }
+
+
         public Renderer renderer;
-        public Scene Scene { get; private set; }
+        public Scene Scene { get; set; }
+
         public FrameBuffer fbo;
 
         protected override void OnLoad()
@@ -44,24 +54,25 @@ namespace EngineCore.Core
             VSync = VSyncMode.On;
             UpdateFrequency = 60;
 
-            graphicsSystem = new GraphicsSystem(new Vector2i(0, 0), new Vector2i(ClientSize.X, ClientSize.Y));
+            Logger.AddLogOutput(new ConsoleLogOutput());
 
-            graphicsSystem.GraphicsContext.ShaderManager.LoadShader("DefaultShader", "D:\\Projects\\GameEngine\\EngineEditor\\Resources\\DefaultVertex.vert",
-                                                                                     "D:\\Projects\\GameEngine\\EngineEditor\\Resources\\DefaultFragment.frag");
-            graphicsSystem.GraphicsContext.ShaderManager.LoadShader("TextureShader", "D:\\Projects\\GameEngine\\EngineEditor\\Resources\\TextureVertex.vert",
-                                                                                     "D:\\Projects\\GameEngine\\EngineEditor\\Resources\\TextureFragment.frag");
+            AssetSystem = new AssetSystem();
+            AssetSystem.LoadAssets();
+
+            GraphicsSystem = new GraphicsSystem(this);
+
+            GraphicsSystem.GraphicsContext.ShaderManager.LoadShader("DefaultShader", "DefaultVertex", "DefaultFragment");
+            GraphicsSystem.GraphicsContext.ShaderManager.LoadShader("TextureShader", "TextureVertex", "TextureFragment");
+
+            SceneSystem = new SceneSystem(this);
 
 
-            renderer = new Renderer(graphicsSystem.GraphicsContext);
-            Scene = new Scene(this);
+            renderer = new Renderer(GraphicsSystem.GraphicsContext);
+            Scene = new Scene();
+            Scene.Application = this;
+            Scene.Name = "Scene1";
 
-
-
-            AssetManager assetmanager = new AssetManager();
-            assetmanager.LoadAssets();
-            //assetmanager.LoadAssetsFromDirectory("Shaders", ".vert");
-
-            Console.WriteLine(assetmanager.GetAsset<ShaderAsset>("Shader").ShaderSource);
+            
 
 
             fbo = new FrameBuffer(ClientSize.X, ClientSize.Y);
@@ -100,9 +111,9 @@ namespace EngineCore.Core
 
             
 
-            renderer.Begin(graphicsSystem.Camera);
+            renderer.Begin(GraphicsSystem.Camera);
             DrawEditor();
-            Scene.Render();
+            SceneSystem.CurrentScene.Render();
             FrameBuffer.Unbind();
 
             GL.Viewport(0, 0, ClientSize.X, ClientSize.Y);
@@ -120,7 +131,7 @@ namespace EngineCore.Core
         {
             base.OnResize(e);
 
-            graphicsSystem.SetViewport(new Vector2i(0, 0), new Vector2i(ClientSize.X, ClientSize.Y));
+            GraphicsSystem.SetViewport(ClientSize.X, ClientSize.Y);
         }
     }
 }

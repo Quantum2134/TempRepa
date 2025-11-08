@@ -1,4 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL4;
+﻿using EngineCore.Core;
+using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
@@ -10,38 +11,40 @@ namespace EngineCore.Graphics
 {
     public class GraphicsSystem
     {
+        public Application Application { get; private set; }
+
         public GraphicsContext GraphicsContext { get; private set; }
 
-        public Vector2i ViewportPos { get; private set; }
-        public Vector2i ViewportSize { get; private set; }
+        public int ViewportWidth { get; private set; }
+        public int ViewportHeight { get; private set; }
 
         public Camera Camera { get; set; }
 
-        public GraphicsSystem(Vector2i viewportPos, Vector2i viewportSize)
+        public GraphicsSystem(Application application)
         {
-            GraphicsContext = new GraphicsContext();
+            GraphicsContext = new GraphicsContext(this);
 
-            ViewportPos = viewportPos;
-            ViewportSize = viewportSize;
+            Application = application;
 
-            GL.Viewport(ViewportPos.X, ViewportPos.Y, ViewportSize.X, ViewportSize.Y);
+            ViewportWidth = application.ClientSize.X;
+            ViewportHeight = application.ClientSize.Y;
+
+            GL.Viewport(0, 0, ViewportWidth, ViewportHeight);
 
             Camera = new Camera()
             {
                 Position = new Vector2(0, 0),
-                AspectRatio = (float)viewportSize.X / viewportSize.Y,
-                Size = viewportSize.Y
+                AspectRatio = (float)ViewportWidth / ViewportHeight,
+                Size = ViewportHeight
             };
         }
 
-        public void SetViewport(Vector2i viewportPos, Vector2i viewportSize)
+        public void SetViewport(int width, int height)
         {
-            ViewportPos = viewportPos;
-            ViewportSize = viewportSize;
 
-            Camera.AspectRatio = (float)ViewportSize.X / ViewportSize.Y;
+            Camera.AspectRatio = (float)ViewportWidth / ViewportHeight;
 
-            GL.Viewport(ViewportPos.X, ViewportPos.Y, ViewportSize.X, ViewportSize.Y);
+            GL.Viewport(0, 0, ViewportWidth, ViewportHeight);
         }
     }
 }

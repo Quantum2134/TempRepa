@@ -23,7 +23,11 @@
 	<ItemGroup>
 	  <None Remove="Resources\Shaders\Shader.glsl" />
 	  <None Remove="Resources\Shaders\Shader.glsl" />
-	</ItemGroup>
+	  <None Remove="Resources\Shaders\Shader.vert" />
+	  <None Remove="Resources\Shaders\Shader.vert" />
+	  <None Remove="Resources\Shaders\ShaderFrag.frag" />
+	  <None Remove="Resources\Shaders\ShaderFrag.frag" />
+	</ItemGroup>	
 
 	<ItemGroup>
 	  <ProjectReference Include="..\EngineCore\EngineCore.csproj" />
@@ -33,6 +37,24 @@
 	  <Reference Include="OpenTK.Windowing.Desktop">
 	    <HintPath>bin\Debug\net8.0\OpenTK.Windowing.Desktop.dll</HintPath>
 	  </Reference>
+	</ItemGroup>
+
+	
+
+	<ItemGroup>
+	  <Folder Include="Resources\Shaders\" />
+	  <Folder Include="Resources\Scenes\" />
+	</ItemGroup>
+
+	
+
+	<ItemGroup>
+	  <None Update="Resources\DefaultFragment.frag" Link="Resources\Shaders\DefaultFragment.frag" />
+	  <None Update="Resources\DefaultVertex.vert" Link="Resources\Shaders\DefaultVertex.vert" />
+	  <None Update="Resources\FBO.vert" Link="Resources\Shaders\FBO.vert" />
+	  <None Update="Resources\FBO2.frag" Link="Resources\Shaders\FBO2.frag" />
+	  <None Update="Resources\TextureFragment.frag" Link="Resources\Shaders\TextureFragment.frag" />
+	  <None Update="Resources\TextureVertex.vert" Link="Resources\Shaders\TextureVertex.vert" />
 	</ItemGroup>
 
 	
