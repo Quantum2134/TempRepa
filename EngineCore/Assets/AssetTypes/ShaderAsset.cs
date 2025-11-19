@@ -6,8 +6,26 @@ using System.Threading.Tasks;
 
 namespace EngineCore.Assets.AssetTypes
 {
-    class ShaderAsset : Asset
+    public class ShaderAsset : Asset, IDisposable
     {
         public string ShaderSource { get; set; }
+        
+        private bool _disposed = false;
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed && disposing)
+            {
+                // Освобождаем строку шейдера
+                ShaderSource = null;
+                _disposed = true;
+            }
+        }
     }
 }

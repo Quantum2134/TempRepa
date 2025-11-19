@@ -10,6 +10,13 @@ namespace EngineCore.Assets.Importers
 {
     internal class ShaderImporter : IAssetImporter
     {
+        private IFileSystem _fileSystem;
+
+        public ShaderImporter(IFileSystem fileSystem)
+        {
+            _fileSystem = fileSystem;
+        }
+
         public bool CanImport(string extension)
         {
             return extension == ".vert" || extension == ".frag";
@@ -17,13 +24,11 @@ namespace EngineCore.Assets.Importers
 
         public Asset Import(string fullPath)
         {
-            string path = Path.GetFileNameWithoutExtension(fullPath);
-
-            string shaderSrc = File.ReadAllText(fullPath);
+            string shaderSrc = _fileSystem.ReadAllText(fullPath);
 
             return new ShaderAsset
             {
-                Name = Path.GetFileNameWithoutExtension(fullPath),
+                Name = _fileSystem.GetFileNameWithoutExtension(fullPath),
                 Path = fullPath,
                 ShaderSource = shaderSrc
             };

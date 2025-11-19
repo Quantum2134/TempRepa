@@ -34,7 +34,7 @@ namespace EngineCore.Core
         {
         }
 
-        public AssetSystem AssetSystem { get; private set; }
+        public AssetManager AssetManager { get; private set; }
 
         public GraphicsSystem GraphicsSystem { get; private set; }
 
@@ -56,13 +56,12 @@ namespace EngineCore.Core
 
             Logger.AddLogOutput(new ConsoleLogOutput());
 
-            AssetSystem = new AssetSystem();
-            AssetSystem.LoadAssets();
+            AssetManager = new AssetManager();
 
             GraphicsSystem = new GraphicsSystem(this);
 
-            GraphicsSystem.GraphicsContext.ShaderManager.LoadShader("DefaultShader", "DefaultVertex", "DefaultFragment");
-            GraphicsSystem.GraphicsContext.ShaderManager.LoadShader("TextureShader", "TextureVertex", "TextureFragment");
+            GraphicsSystem.GraphicsContext.ShaderManager.LoadShader("DefaultShader", "Shaders/DefaultVertex.vert", "Shaders/DefaultFragment.frag");
+            GraphicsSystem.GraphicsContext.ShaderManager.LoadShader("TextureShader", "Shaders/TextureVertex.vert", "Shaders/TextureFragment.frag");
 
             SceneSystem = new SceneSystem(this);
 
@@ -84,6 +83,8 @@ namespace EngineCore.Core
         protected override void OnUnload()
         {
             base.OnUnload();
+            
+            AssetManager?.Dispose();
         }
 
         protected virtual void DrawEditor()

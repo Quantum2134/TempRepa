@@ -66,19 +66,19 @@ namespace EngineCore.ECS
 
         public void SaveScene(Scene scene)
         {
-            SceneSerializer.SaveScene(Path.Combine(Application.AssetSystem.ResourcesPath, "Scenes"), scene);
+            SceneSerializer.SaveScene(Path.Combine(Application.AssetManager.ResourcesPath, "Scenes"), scene);
         }
 
         public void SaveCurrentScene()
         {
-            SceneSerializer.SaveScene(Path.Combine(Application.AssetSystem.ResourcesPath, "Scenes"), CurrentScene);
+            SceneSerializer.SaveScene(Path.Combine(Application.AssetManager.ResourcesPath, "Scenes"), CurrentScene);
         }
 
         public void SaveAllScenes()
         {
             foreach(Scene scene in scenes)
             {
-                SceneSerializer.SaveScene(Path.Combine(Application.AssetSystem.ResourcesPath, "Scenes"), scene);
+                SceneSerializer.SaveScene(Path.Combine(Application.AssetManager.ResourcesPath, "Scenes"), scene);
             }
         }
 

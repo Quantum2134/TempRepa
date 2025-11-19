@@ -39,7 +39,13 @@ namespace EngineCore.Graphics.GraphicsManagers
         {
             if (textures.ContainsKey(name)) return textures[name];
 
-            TextureAsset textureAsset = graphicsContext.GraphicsSystem.Application.AssetSystem.GetAsset<TextureAsset>(name);
+            TextureAsset textureAsset = graphicsContext.GraphicsSystem.Application.AssetManager.LoadAsset<TextureAsset>(name);
+
+            if (textureAsset == null)
+            {
+                Logger.Log($"Could not load texture asset for {name}", LogLevel.Error);
+                return null;
+            }
 
             Texture texture = new Texture(textureAsset.Width, textureAsset.Height, textureAsset.PixelData);
             textures.Add(name, texture);

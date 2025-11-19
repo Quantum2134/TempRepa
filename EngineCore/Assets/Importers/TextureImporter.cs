@@ -12,8 +12,11 @@ namespace EngineCore.Assets.Importers
 {
     internal class TextureImporter : IAssetImporter
     {
-        public TextureImporter()
+        private IFileSystem _fileSystem;
+
+        public TextureImporter(IFileSystem fileSystem)
         {
+            _fileSystem = fileSystem;
             StbImage.stbi_set_flip_vertically_on_load(1);
         }
 
@@ -24,13 +27,13 @@ namespace EngineCore.Assets.Importers
 
         public Asset Import(string fullPath)
         {
-            using (FileStream stream = File.OpenRead(fullPath))
+            using (Stream stream = _fileSystem.OpenRead(fullPath))
             {
                 ImageResult image = ImageResult.FromStream(stream, ColorComponents.RedGreenBlueAlpha);
 
                 return new TextureAsset
                 {
-                    Name = Path.GetFileNameWithoutExtension(fullPath),
+                    Name = _fileSystem.GetFileNameWithoutExtension(fullPath),
                     Path = fullPath,
                     Width = image.Width,
                     Height = image.Height,

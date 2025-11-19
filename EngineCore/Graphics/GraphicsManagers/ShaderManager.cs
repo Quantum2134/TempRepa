@@ -30,12 +30,18 @@ namespace EngineCore.Graphics.GraphicsManagers
             return null;
         }
 
-        public ShaderProgram LoadShader(string shaderProgramName, string vertexShaderName, string fragmentShaderName)
+        public ShaderProgram LoadShader(string shaderProgramName, string vertexShaderPath, string fragmentShaderPath)
         {
             if(_shaders.ContainsKey(shaderProgramName)) return _shaders[shaderProgramName];
 
-            ShaderAsset vertexShaderAsset = graphicsContext.GraphicsSystem.Application.AssetSystem.GetAsset<ShaderAsset>(vertexShaderName);
-            ShaderAsset fragmentShaderAsset = graphicsContext.GraphicsSystem.Application.AssetSystem.GetAsset<ShaderAsset>(fragmentShaderName);
+            ShaderAsset vertexShaderAsset = graphicsContext.GraphicsSystem.Application.AssetManager.LoadAsset<ShaderAsset>(vertexShaderPath);
+            ShaderAsset fragmentShaderAsset = graphicsContext.GraphicsSystem.Application.AssetManager.LoadAsset<ShaderAsset>(fragmentShaderPath);
+
+            if (vertexShaderAsset == null || fragmentShaderAsset == null)
+            {
+                Logger.Log($"Could not load shader assets for {shaderProgramName}", LogLevel.Error);
+                return null;
+            }
 
             ShaderProgram shader = new ShaderProgram(vertexShaderAsset.ShaderSource, fragmentShaderAsset.ShaderSource);
             _shaders.Add(shaderProgramName, shader);
