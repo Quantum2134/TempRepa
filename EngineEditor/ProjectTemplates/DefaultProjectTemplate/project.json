@@ -1,0 +1,16 @@
+{
+  "name": "Untitled",
+  "author": "",
+  "version": "1.0.0",
+  "entryScenePath": "scenes/default.qscene",
+  "scenesDirectory": "scenes",
+  "assetsDirectory": "assets",
+  "scriptsDirectory": "scripts",
+  "settingsDirectory": "settings",
+  "buildSettings": {
+    "outputDirectory": "build",
+    "executableName": "Game",
+    "targetPlatform": "Windows",
+    "includeDebugSymbols": false
+  }
+}

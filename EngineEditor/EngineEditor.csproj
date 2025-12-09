@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>annotations</Nullable>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+		
+	
+	<ItemGroup>
+		<PackageReference Include="ImGui.NET" Version="1.91.6.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\EngineCore\EngineCore.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="GameBuild\Utils\" />
+	  <Folder Include="ProjectTemplates\" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+		<None Update="EditorResources/**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="ProjectTemplates/**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+	
+
+</Project>
